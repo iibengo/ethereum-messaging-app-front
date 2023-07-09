@@ -157,4 +157,3 @@ export default defineComponent({
   margin-right: 10px;
 }
 </style>
-../services/public-messaging-service/map/contract-messages-to-message-model-map
