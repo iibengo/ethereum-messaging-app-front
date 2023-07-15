@@ -4,7 +4,7 @@ Esta aplicación es un chat descentralizado basado en un contrato inteligente de
 
 ## Demo
 
-Puedes acceder a una demostración de la aplicación [aquí](URL_DEMO).
+Puedes acceder a una demostración de la aplicación [aquí](https://public-msg-contract-vue-74565c0bbf81.herokuapp.com/home).
 
 ## Características principales
 
