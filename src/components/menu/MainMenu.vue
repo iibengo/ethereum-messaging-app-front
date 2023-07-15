@@ -10,7 +10,9 @@
         >Crear usuario</el-menu-item
       >
       <el-menu-item v-if="loggedIn"> {{ `Hola ${user.name}` }} </el-menu-item>
-      <el-menu-item v-if="loggedIn"> Actualizar </el-menu-item>
+      <el-menu-item v-if="loggedIn" @click="$emit('update')">
+        Actualizar
+      </el-menu-item>
     </el-menu>
   </el-header>
 </template>

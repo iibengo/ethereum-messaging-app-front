@@ -1,7 +1,8 @@
 <template>
   <div class="message-chat">
     <loading :loading="loading" />
-    <create-user-modal
+    <!-- Modal crear usuario -->
+    <CreateUserDialog
       :visible="createDialog"
       @close="createDialog = false"
       @createUser="createUser"
@@ -13,12 +14,15 @@
       :user="getLoginUser"
       @createUser="openCreateUser"
       @connectWallet="connectAndLogin"
+      @update="getMessageList"
     />
+    <!-- Componente chat -->
     <chat-componet
       v-if="getIsConnected"
       :loggedIn="getIsLoggedIn"
-      :messagesList="messages"
-      @onSendMessage="sendMessage"
+      :messagesList="messageList"
+      @onSendMessage="sendMessage($event)"
+      @deleteMessage="deleteMessage($event)"
     />
     <div v-else class="login_msg">
       <a href="#">Inicia sesión</a> con metamask para ver los mensajes
@@ -32,27 +36,36 @@ import {
   MainMenu,
   ChatComponent,
   Loading,
-  CreateUserModal,
+  CreateUserDialog,
 } from "../components/";
-import web3ProviderMixin from "./mixin/store-mixing";
+import { web3StoreProviderMixin } from "./mixin/";
 import { ContractUser, MessageModel } from "@/contract";
-import { createUser, getMessages, getUser } from "@/services/";
+import {
+  createUser,
+  getMessages,
+  getUser,
+  writeMessage,
+  attachContractEvent,
+  deleteMessage,
+} from "@/services/";
 import { ElMessage } from "element-plus";
+import { netWorkUrl } from "@/config";
 
 export default defineComponent({
   components: {
-    CreateUserModal,
+    CreateUserDialog,
     MainMenu,
     "chat-componet": ChatComponent,
     loading: Loading,
   },
-  mixins: [web3ProviderMixin],
+  mixins: [web3StoreProviderMixin],
   data() {
     return {
       createDialog: false,
       userWallet: "",
-      messages: [] as MessageModel[],
+      messageList: [] as MessageModel[],
       loading: false,
+      attachedEvent: false,
     };
   },
   computed: {
@@ -82,7 +95,6 @@ export default defineComponent({
       this.$forceUpdate();
     },
     async createUser(name: string) {
-      console.log("createuser", name, this.getProvider());
       const created = await createUser(
         name,
         this.getProvider(),
@@ -90,7 +102,6 @@ export default defineComponent({
         this.onConfirmCreate
       );
       this.loading = false;
-      console.log("created", created);
       if (created) {
         this.onCreateUser(name);
       }
@@ -98,46 +109,98 @@ export default defineComponent({
 
     async connectAndLogin() {
       await this.connectToMetamask();
-      await this.getMessagesData();
+      await this.getMessageList();
       this.$forceUpdate();
       const existUser = await getUser(this.getWallet(), this.getProvider());
       this.setIsLoggedIn(!!existUser);
       if (existUser) {
         this.setUser(existUser);
       }
+      if (!this.attachedEvent) {
+        this.attachedEvent = true;
+        attachContractEvent(
+          this.getProvider(),
+          this.onSendMessage,
+          this.onDeleteMessage
+        );
+      }
     },
-    async getMessagesData() {
-      const messageList = await getMessages(
+    async getMessageList() {
+      const response = await getMessages(this.getWallet(), this.getProvider());
+      this.messageList = response;
+    },
+    async sendMessage(msg: string): Promise<void> {
+      const newMessage = await writeMessage(
+        msg,
+        this.getProvider(),
         this.getWallet(),
-        this.getProvider()
+        (transaction: string) => {
+          this.loading = true;
+          this.showMessage("Escribiendo mensaje", transaction);
+        }
       );
-      this.messages = messageList;
+      this.loading = false;
+      if (newMessage) {
+        this.showMessage(`Mensaje creado: ${newMessage}`);
+      }
     },
-    async sendMessage() {
-      //
+    async deleteMessage(msgId: number): Promise<void> {
+      const isDeleted = await deleteMessage(
+        msgId,
+        this.getProvider(),
+        this.getWallet(),
+        (transaction: string) => {
+          this.loading = true;
+          this.showMessage(`Eliminando mensaje ${msgId}`, transaction);
+        }
+      );
+      this.loading = false;
+      if (isDeleted) {
+        this.showMessage(`Mensaje eliminado`);
+      }
     },
-    onConfirmCreate() {
-      ElMessage({
-        showClose: true,
-        message: "Creando Usuario",
-        type: "warning",
-      });
+    onConfirmCreate(transaction: string) {
+      this.showMessage(`Creando Usuario`, transaction);
       this.loading = true;
       this.closeCreateUser();
     },
-    async onCreateUser(name: string) {
-      this.createDialog = false;
+    onDeleteMessage() {
+      this.getMessageList();
+    },
+    onSendMessage() {
+      this.getMessageList();
+      const chatContainer = document.querySelector(
+        ".chat-container"
+      ) as HTMLElement;
+      // Hacer scroll hacia abajo
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    },
+    showMessage(content: string, url?: string) {
+      const urlElement = url
+        ? `<a href="${netWorkUrl.ETHTest}tx/${url}" target="_blank">${url}</a>`
+        : "";
       ElMessage({
         showClose: true,
-        message: `Usuario ${name} creado!`,
         type: "success",
+        dangerouslyUseHTMLString: true,
+        message: `<label>${content} ${urlElement}</label>`,
       });
+    },
+    async onCreateUser(name: string) {
+      this.createDialog = false;
+      this.showMessage(`Usuario ${name} creado!`);
       await this.connectAndLogin();
       this.$forceUpdate();
     },
   },
 });
 </script>
+<style>
+html {
+  overflow: hidden !important;
+}
+</style>
+
 <style scoped>
 .message-chat {
   height: 100vh;

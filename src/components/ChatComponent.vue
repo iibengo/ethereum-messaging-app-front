@@ -3,14 +3,21 @@
   <el-main class="chat-container">
     <el-card class="chat-card" v-if="messagesList.length">
       <div
-        v-for="message in messagesList"
+        v-for="message in getMessages"
         :key="message.id"
         :class="['chat-message', message.isMe ? 'chat-message-me' : '']"
       >
         <div class="chat-message-content">
           <div class="chat-message-header">
             <span class="chat-message-user">{{ message.user }}</span>
-            <span class="chat-message-time">{{ message.time }}</span>
+            <span class="chat-message-time"
+              >{{ message.time }}
+              <component
+                v-if="message.isMe"
+                class="delete-icon"
+                :is="icons.Close"
+                @click="deleteMessage(message.id)"
+            /></span>
           </div>
           <div class="chat-message-text">{{ message.text }}</div>
         </div>
@@ -41,12 +48,13 @@
 <script lang="ts">
 import { MessageModel } from "@/contract";
 import { defineComponent } from "vue";
-
+import { icons } from "@element-plus/icons-vue/global";
 export default defineComponent({
   components: {},
   data() {
     return {
       newMessage: "",
+      icons: icons,
     };
   },
   props: {
@@ -59,11 +67,20 @@ export default defineComponent({
       default: () => [],
     },
   },
+  computed: {
+    getMessages() {
+      console.log(this.messagesList);
+      return this.messagesList.filter((msg) => !!msg.text);
+    },
+  },
   methods: {
     sendMessage() {
       if (this.newMessage.trim() !== "") {
         this.$emit("onSendMessage", this.newMessage);
       }
+    },
+    deleteMessage(messageId: number) {
+      this.$emit("deleteMessage", messageId);
     },
   },
 });
@@ -90,6 +107,8 @@ export default defineComponent({
   flex: 1;
   padding: 0;
   overflow-y: auto;
+  overflow: scroll;
+  margin-bottom: 55px;
 }
 
 .chat-card {
@@ -155,5 +174,11 @@ export default defineComponent({
 
 .chat-input {
   margin-right: 10px;
+}
+
+.delete-icon {
+  width: 10px;
+  display: inline-block;
+  color: #690101;
 }
 </style>

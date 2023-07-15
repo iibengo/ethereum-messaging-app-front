@@ -61,12 +61,12 @@ export async function createTransaction(
     provider.eth
       .sendTransaction(transactionObject)
       .on("transactionHash", (hash) => {
-        onConfirmCallback();
+        onConfirmCallback(hash);
         console.log("Transaction hash:", hash);
       })
       .on("receipt", () => resolve(true))
       .on("error", (err) => {
-        console.error("Create user error", err);
+        console.error("Transaction error", err);
         resolve(false);
       });
   });

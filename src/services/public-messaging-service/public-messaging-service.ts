@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/ban-types */
 import PublicMessaging from "@/contract/PublicMessaging.json";
 import { createTransaction } from "../web3-service/web3-service";
 import { AbiItem } from "web3-utils";
@@ -67,4 +70,54 @@ export async function createUser(
     data: contract.methods.createUser(name).encodeABI(),
   };
   return createTransaction(provider, transactionObject, onConfirmCallback);
+}
+export async function writeMessage(
+  content: string,
+  provider: Web3,
+  from: string,
+  onConfirmCallback: Function
+): Promise<boolean> {
+  const contractABI = PublicMessaging.abi as AbiItem[];
+  const contract = new provider.eth.Contract(contractABI, contractAddress);
+  const transactionObject = {
+    from: from,
+    to: contractAddress,
+    data: contract.methods.writeMessage(content).encodeABI(),
+  };
+  return createTransaction(provider, transactionObject, onConfirmCallback);
+}
+export async function deleteMessage(
+  id: number,
+  provider: Web3,
+  from: string,
+  onConfirmCallback: Function
+): Promise<boolean> {
+  const contractABI = PublicMessaging.abi as AbiItem[];
+  const contract = new provider.eth.Contract(contractABI, contractAddress);
+  const transactionObject = {
+    from: from,
+    to: contractAddress,
+    data: contract.methods.deleteMessage(id).encodeABI(),
+  };
+  return createTransaction(provider, transactionObject, onConfirmCallback);
+}
+export function attachContractEvent(
+  provider: Web3,
+  onMessageSend: Function,
+  onMessageDelete: Function
+): void {
+  const contractABI = PublicMessaging.abi as AbiItem[];
+  const contract = new provider.eth.Contract(contractABI, contractAddress);
+  contract.events.MessageSent((error: Error, _event: any) => {
+    if (error) {
+      return;
+    }
+    onMessageSend();
+  });
+  contract.events.MessageDeleted((error: Error, _event: any) => {
+    if (error) {
+      return;
+    }
+    onMessageDelete();
+  });
 }

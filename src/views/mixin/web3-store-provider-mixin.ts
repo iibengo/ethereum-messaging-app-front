@@ -8,7 +8,7 @@ interface StoreMixins extends ComponentOptions<unknown> {
   store: Store<Web3ProviderStoreModel>;
 }
 
-const web3ProviderMixin = defineComponent<StoreMixins>({
+const web3StoreProviderMixin = defineComponent<StoreMixins>({
   data() {
     return {
       store: this.$store as Store<Web3ProviderStoreModel>,
@@ -57,4 +57,4 @@ const web3ProviderMixin = defineComponent<StoreMixins>({
   },
 });
 
-export default web3ProviderMixin;
+export { web3StoreProviderMixin };

@@ -5,7 +5,7 @@
         v-model="username"
         placeholder="Ingrese su nombre de usuario"
       ></el-input>
-      <p class="explanation">Coste: <b>0.01 ETH.</b></p>
+      <p class="explanation">Tarifa <b>0.01 ETH.</b></p>
       <el-button type="primary" @click="createUser">Crear</el-button>
     </div>
   </el-dialog>

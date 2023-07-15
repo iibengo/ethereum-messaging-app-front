@@ -24,12 +24,10 @@ export default {
 
 <style scoped>
 .loading-indicator {
-  position: absolute;
+  position: fixed;
   top: 5px;
   right: 14px;
-  z-index: 9999;
-  text-align: right;
-  display: inline;
+  z-index: 9;
 }
 .loading-indicator .icon {
   max-width: 40px;
