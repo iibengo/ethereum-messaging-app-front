@@ -175,8 +175,6 @@ El bloque de estilos dentro del archivo `HomeView.vue` aplica estilos CSS espec�
 
 El bloque de estilos dentro del archivo `HomeView.vue` aplica estilos CSS específicos al componente. Las clases `.message-chat` y `.login_msg` se utilizan para definir la apariencia del chat y del mensaje de inicio de sesión, respectivamente. Estos estilos están limitados al alcance del componente específico, gracias al modificador `scoped`.
 
-Por supuesto, aquí tienes un resumen de los dos servicios en formato Markdown:
-
 ## public-messaging-service
 
 Este servicio proporciona funciones relacionadas con la mensajería pública en una blockchain. Estas son las principales funciones del servicio:
