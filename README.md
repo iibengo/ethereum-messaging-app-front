@@ -204,5 +204,3 @@ Este servicio está relacionado con la interacción con MetaMask y la gestión d
 - `isConnected(): Promise<boolean>`: Comprueba si el usuario está conectado a MetaMask y si hay una cuenta activa.
 
 - `createTransaction(provider: Web3, transactionObject: object, onConfirmCallback: Function): Promise<boolean>`: Crea una transacción en la blockchain utilizando los datos proporcionados en el objeto de transacción. Requiere una instancia del proveedor de Web3, el objeto de transacción y una función de devolución de llamada para confirmar la transacción.
-
-Espero que este resumen te resulte útil. Si tienes alguna otra pregunta, no dudes en hacerla.
