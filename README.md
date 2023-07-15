@@ -56,8 +56,7 @@ Sigue estos pasos para configurar y ejecutar la aplicación:
 
 ## Contrato PublicMessage
 
-Puedes actualizar la dirección del [contrato](https://github.com/ionilancer/ethereum-messaging-app-back) en el archivo `config/contract/`.
-Actualiza la constante `publicMessagingETHTest` con la dirección por defecto del contrato.
+Para actualizar la dirección por defecto del [contrato](https://github.com/ionilancer/ethereum-messaging-app-back) en el archivo `config/contract/` cambia la constante `publicMessagingETHTest`.
 
 ## Uso de MetaMask
 
@@ -81,6 +80,10 @@ Antes de utilizar la aplicación, asegúrate de seguir estos pasos para configur
 - Para enviar un mensaje, simplemente ingresa el texto en el cuadro de entrada y presiona el botón "Enviar".
 - Los mensajes se muestran en el componente de chat en tiempo real.
 
+### Eliminar mensajes
+
+- Para eliminar un mensaje presiona el icono de cerrar "x" en tu mensaje.
+
 ### Dificultades de la práctica
 
 - Crear una interfaz de usuario visual y amigable de forma sencilla.
@@ -89,9 +92,10 @@ Antes de utilizar la aplicación, asegúrate de seguir estos pasos para configur
 
 ### Mejoras de la aplicación
 
-- Añadir roles premium para usuarios.
+- Testear la aplicación.
 - Mejorar el diseño y la interfaz de usuario.
 - Crear un panel de administrador.
+- Terminar de usar todas las funciones del contrato.
 
 ## Contribuciones
 
@@ -137,6 +141,7 @@ crear un nuevo usuario.
 - `userWallet`: La dirección de la billetera del usuario actual.
 - `messages`: Un array de objetos `MessageModel` que representa los mensajes del chat.
 - `loading`: Un booleano que indica si la aplicación se encuentra en un estado de carga.
+- `attachedEvent`: Un booleano que indica si la aplicación esta escuchando los eventos del contrato.
 
 #### Propiedades Calculadas:
 
@@ -153,11 +158,14 @@ crear un nuevo usuario.
 - `closeCreateUser`: Cierra el diálogo de creación de usuario.
 - `openCreateUser`: Abre el diálogo de creación de usuario.
 - `createUser`: Crea un nuevo usuario utilizando el nombre proporcionado. Llama a la función `createUser` del contrato inteligente y actualiza el estado de carga y los datos del usuario.
+- `deleteMessage`: Elimina el mensaje llamando a la función `deleteMessage` del contrato inteligente
 - `connectAndLogin`: Conecta la aplicación a MetaMask, obtiene los mensajes existentes y verifica la existencia del usuario actualmente conectado.
 - `getMessagesData`: Obtiene los mensajes del chat llamando a la función `getMessages` del contrato inteligente y actualiza el estado de los mensajes.
-- `sendMessage`: Envía un nuevo mensaje en el chat (implementación pendiente).
+- `sendMessage`: Envía un nuevo mensaje en el chat, llamando a la función `writeMessage` del contrato inteligente .
 - `onConfirmCreate`: Callback que se ejecuta cuando se confirma la creación de un nuevo usuario. Muestra un mensaje de advertencia y establece el estado de carga.
 - `onCreateUser`: Callback que se ejecuta después de crear un nuevo usuario. Cierra el diálogo de creación de usuario, muestra un mensaje de éxito, realiza la conexión y el inicio de sesión correspondientes, y actualiza la vista.
+- `onSendMessage`: Callback que se ejecuta después de enviar un mensaje, actualiza los mensajes y baja el scroll.
+- `onDeleteMessage`: Callback que se ejecuta después de eliminar un mensaje, actualiza los mensaje.
 
 ## Estilos
 
