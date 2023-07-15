@@ -171,4 +171,38 @@ crear un nuevo usuario.
 
 El bloque de estilos dentro del archivo `HomeView.vue` aplica estilos CSS específicos al componente. Las clases `.message-chat` y `.login_msg` se utilizan para definir la apariencia del chat y del mensaje de inicio de sesión, respectivamente. Estos estilos están limitados al alcance del componente específico, gracias al modificador `scoped`.
 
-Es importante destacar que, aunque se ha proporcionado el código fuente de la aplicación, la implementación y funcionalidades específicas de algunos métodos, como `sendMessage`, no han sido incluidas. Estos métodos pueden ser completados según sea necesario para satisfacer los requisitos de la aplicación.
+## Estilos
+
+El bloque de estilos dentro del archivo `HomeView.vue` aplica estilos CSS específicos al componente. Las clases `.message-chat` y `.login_msg` se utilizan para definir la apariencia del chat y del mensaje de inicio de sesión, respectivamente. Estos estilos están limitados al alcance del componente específico, gracias al modificador `scoped`.
+
+Por supuesto, aquí tienes un resumen de los dos servicios en formato Markdown:
+
+## public-messaging-service
+
+Este servicio proporciona funciones relacionadas con la mensajería pública en una blockchain. Estas son las principales funciones del servicio:
+
+- `getMessages(wallet: string, provider: Web3): Promise<MessageModel[]>`: Devuelve una lista de mensajes públicos almacenados en el contrato inteligente de la blockchain. Recibe como entrada una billetera (wallet) y una instancia del proveedor de Web3.
+
+- `getUser(wallet: string, provider: Web3): Promise<ContractUser | undefined>`: Obtiene la información del usuario asociado a una billetera en particular. Recibe como entrada una billetera (wallet) y una instancia del proveedor de Web3.
+
+- `createUser(name: string, provider: Web3, from: string, onConfirmCallback: Function): Promise<boolean>`: Crea un nuevo usuario en la plataforma de mensajería pública. Requiere el nombre del usuario, una instancia del proveedor de Web3, la dirección de la billetera desde la cual se realizará la transacción y una función de devolución de llamada para confirmar la transacción.
+
+- `writeMessage(content: string, provider: Web3, from: string, onConfirmCallback: Function): Promise<boolean>`: Escribe un nuevo mensaje en la plataforma de mensajería pública. Recibe el contenido del mensaje, una instancia del proveedor de Web3, la dirección de la billetera desde la cual se realizará la transacción y una función de devolución de llamada para confirmar la transacción.
+
+- `deleteMessage(id: number, provider: Web3, from: string, onConfirmCallback: Function): Promise<boolean>`: Elimina un mensaje existente en la plataforma de mensajería pública. Requiere el ID del mensaje, una instancia del proveedor de Web3, la dirección de la billetera desde la cual se realizará la transacción y una función de devolución de llamada para confirmar la transacción.
+
+- `attachContractEvent(provider: Web3, onMessageSend: Function, onMessageDelete: Function): void`: Permite suscribirse a los eventos del contrato inteligente de la blockchain. Cuando se envía o elimina un mensaje, se llaman a las funciones de devolución de llamada proporcionadas.
+
+## web3-service
+
+Este servicio está relacionado con la interacción con MetaMask y la gestión de cuentas. Estas son las funciones principales del servicio:
+
+- `getAccountAddress(provider: Web3): Promise<string>`: Obtiene la dirección de la cuenta activa conectada a través de MetaMask. Requiere una instancia del proveedor de Web3.
+
+- `connectToMetaMask(): Promise<Web3 | undefined>`: Establece una conexión con MetaMask y devuelve una instancia de Web3 si se logra la conexión.
+
+- `isConnected(): Promise<boolean>`: Comprueba si el usuario está conectado a MetaMask y si hay una cuenta activa.
+
+- `createTransaction(provider: Web3, transactionObject: object, onConfirmCallback: Function): Promise<boolean>`: Crea una transacción en la blockchain utilizando los datos proporcionados en el objeto de transacción. Requiere una instancia del proveedor de Web3, el objeto de transacción y una función de devolución de llamada para confirmar la transacción.
+
+Espero que este resumen te resulte útil. Si tienes alguna otra pregunta, no dudes en hacerla.
