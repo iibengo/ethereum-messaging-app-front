@@ -13,6 +13,9 @@
       <el-menu-item v-if="loggedIn" @click="$emit('update')">
         Actualizar
       </el-menu-item>
+      <el-menu-item v-if="loggedIn">
+        {{ `total mensajes: ${totalMessages}` }}
+      </el-menu-item>
     </el-menu>
   </el-header>
 </template>
@@ -28,6 +31,10 @@ export default defineComponent({
     };
   },
   props: {
+    totalMessages: {
+      type: Number,
+      default: 0,
+    },
     connected: {
       type: Boolean,
     },

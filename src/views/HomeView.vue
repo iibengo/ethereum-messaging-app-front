@@ -12,6 +12,7 @@
       :loggedIn="getIsLoggedIn"
       :connected="getIsConnected"
       :user="getLoginUser"
+      :totalMessages="totalMessages"
       @createUser="openCreateUser"
       @connectWallet="connectAndLogin"
       @update="getMessageList"
@@ -47,6 +48,7 @@ import {
   writeMessage,
   attachContractEvent,
   deleteMessage,
+  getActiveMessages,
 } from "@/services/";
 import { ElMessage } from "element-plus";
 import { netWorkUrl } from "@/config";
@@ -62,6 +64,7 @@ export default defineComponent({
   data() {
     return {
       createDialog: false,
+      totalMessages: 0,
       userWallet: "",
       messageList: [] as MessageModel[],
       loading: false,
@@ -109,6 +112,7 @@ export default defineComponent({
 
     async connectAndLogin() {
       await this.connectToMetamask();
+      await this.getTotalMessages();
       await this.getMessageList();
       this.$forceUpdate();
       const existUser = await getUser(this.getWallet(), this.getProvider());
@@ -128,6 +132,10 @@ export default defineComponent({
     async getMessageList() {
       const response = await getMessages(this.getWallet(), this.getProvider());
       this.messageList = response;
+    },
+    async getTotalMessages() {
+      const response = await getActiveMessages(this.getProvider());
+      this.totalMessages = response;
     },
     async sendMessage(msg: string): Promise<void> {
       const newMessage = await writeMessage(
@@ -167,8 +175,9 @@ export default defineComponent({
     onDeleteMessage() {
       this.getMessageList();
     },
-    onSendMessage() {
-      this.getMessageList();
+    async onSendMessage() {
+      await this.getMessageList();
+      await this.getTotalMessages();
       const chatContainer = document.querySelector(
         ".chat-container"
       ) as HTMLElement;

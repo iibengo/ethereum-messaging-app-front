@@ -1,5 +1,5 @@
 export enum ContractAddressEnum {
-  publicMessagingETHTest = "0xBf3D604c1D8843191858a98427dA7cB3600F60c2",
+  publicMessagingETHTest = "0x91c9375DE3edeE5E86420292b0359523F4568655",
 }
 export enum netWorkUrl {
   ETHTest = "https://sepolia.etherscan.io/",

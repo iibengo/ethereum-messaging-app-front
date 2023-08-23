@@ -33,6 +33,22 @@ export async function getMessages(
       });
   });
 }
+export async function getActiveMessages(provider: Web3): Promise<number> {
+  const abi = PublicMessaging.abi as Array<AbiItem>;
+  const contract = new provider.eth.Contract(abi, contractAddress);
+  return new Promise<number>((resolve, reject) => {
+    contract.methods
+      .getTotalActiveMessages()
+      .call()
+      .then((result: number) => {
+        console.log(result);
+        resolve(result);
+      })
+      .catch((err: Error) => {
+        reject(err);
+      });
+  });
+}
 export async function getUser(
   wallet: string,
   provider: Web3
