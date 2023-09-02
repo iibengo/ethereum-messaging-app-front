@@ -171,10 +171,6 @@ crear un nuevo usuario.
 
 El bloque de estilos dentro del archivo `HomeView.vue` aplica estilos CSS específicos al componente. Las clases `.message-chat` y `.login_msg` se utilizan para definir la apariencia del chat y del mensaje de inicio de sesión, respectivamente. Estos estilos están limitados al alcance del componente específico, gracias al modificador `scoped`.
 
-## Estilos
-
-El bloque de estilos dentro del archivo `HomeView.vue` aplica estilos CSS específicos al componente. Las clases `.message-chat` y `.login_msg` se utilizan para definir la apariencia del chat y del mensaje de inicio de sesión, respectivamente. Estos estilos están limitados al alcance del componente específico, gracias al modificador `scoped`.
-
 ## public-messaging-service
 
 Este servicio proporciona funciones relacionadas con la mensajería pública en una blockchain. Estas son las principales funciones del servicio:
@@ -188,6 +184,8 @@ Este servicio proporciona funciones relacionadas con la mensajería pública en 
 - `writeMessage(content: string, provider: Web3, from: string, onConfirmCallback: Function): Promise<boolean>`: Escribe un nuevo mensaje en la plataforma de mensajería pública. Recibe el contenido del mensaje, una instancia del proveedor de Web3, la dirección de la billetera desde la cual se realizará la transacción y una función de devolución de llamada para confirmar la transacción.
 
 - `deleteMessage(id: number, provider: Web3, from: string, onConfirmCallback: Function): Promise<boolean>`: Elimina un mensaje existente en la plataforma de mensajería pública. Requiere el ID del mensaje, una instancia del proveedor de Web3, la dirección de la billetera desde la cual se realizará la transacción y una función de devolución de llamada para confirmar la transacción.
+
+- `getActiveMessages(provider: Web3): Promise<number>`: devuelve el numero de mensajes activos.
 
 - `attachContractEvent(provider: Web3, onMessageSend: Function, onMessageDelete: Function): void`: Permite suscribirse a los eventos del contrato inteligente de la blockchain. Cuando se envía o elimina un mensaje, se llaman a las funciones de devolución de llamada proporcionadas.
 
